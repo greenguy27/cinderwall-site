@@ -11,16 +11,16 @@
     *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
 
     :root {
-      --ash:        #e8e0d4;
-      --bone:       #d4c8b8;
-      --ember:      #c87a40;
-      --ember-dim:  #8a4f22;
-      --smoke:      #a0978e;
-      --coal:       #6a5a4a;
-      --soot:       #3a2a1a;
-      --soot2:      #2a1e12;
-      --void:       #080808;
-      --char:       #0e0c0a;
+      --ash:       #e8e0d4;
+      --bone:      #d4c8b8;
+      --ember:     #c87a40;
+      --ember-dim: #8a4f22;
+      --smoke:     #a0978e;
+      --coal:      #6a5a4a;
+      --soot:      #3a2a1a;
+      --soot2:     #2a1e12;
+      --void:      #080808;
+      --char:      #0e0c0a;
     }
 
     html { scroll-behavior: smooth; }
@@ -33,7 +33,7 @@
       overflow-x: hidden;
     }
 
-    /* ── Global grain ── */
+    /* Global grain */
     body::after {
       content: '';
       position: fixed;
@@ -45,8 +45,7 @@
     }
 
     /* ══════════════════════════════════
-       HERO — full-bleed CSS scene
-       Replace .hero-image with <img> when artwork is ready
+       HERO
     ══════════════════════════════════ */
     .hero {
       position: relative;
@@ -60,102 +59,47 @@
       overflow: hidden;
     }
 
-    /* CSS stand-in for the hero image — swap for <img class="hero-image"> later */
-    .hero-image-placeholder {
+    .hero-image {
       position: absolute;
       inset: 0;
-      /* Cracked wall / ember glow scene in pure CSS */
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: center top;
+      filter: brightness(0.45) saturate(0.7);
+      z-index: 0;
+    }
+
+    /* Ember bloom rising from below Cain */
+    .hero-overlay {
+      position: absolute;
+      inset: 0;
       background:
-        /* Ember bloom at base — will sit behind Cain */
-        radial-gradient(ellipse 60% 35% at 50% 100%, rgba(180,70,10,0.55) 0%, transparent 70%),
-        /* Secondary side glow */
-        radial-gradient(ellipse 30% 50% at 20% 60%,  rgba(120,40,5,0.25)  0%, transparent 60%),
-        radial-gradient(ellipse 25% 40% at 80% 40%,  rgba(100,35,5,0.18)  0%, transparent 55%),
-        /* Deep void */
-        linear-gradient(to bottom, #0a0604 0%, #0e0a06 40%, #120c06 70%, #1a0e06 100%);
-      z-index: 0;
-    }
-
-    /* Cracked wall texture via SVG filter */
-    .hero-image-placeholder::before {
-      content: '';
-      position: absolute;
-      inset: 0;
-      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='800' height='800'%3E%3Cfilter id='crack'%3E%3CfeTurbulence type='turbulence' baseFrequency='0.02 0.05' numOctaves='3' seed='8' result='noise'/%3E%3CfeColorMatrix type='saturate' values='0' in='noise' result='grey'/%3E%3CfeComponentTransfer in='grey' result='contrast'%3E%3CfeFuncR type='discrete' tableValues='0 0 0 0 0 0.03 0.03'/%3E%3CfeFuncG type='discrete' tableValues='0 0 0 0 0 0.02 0.02'/%3E%3CfeFuncB type='discrete' tableValues='0 0 0 0 0 0.01 0.01'/%3E%3C/feComponentTransfer%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23crack)' opacity='0.6'/%3E%3C/svg%3E");
-      opacity: 0.7;
-      z-index: 0;
-    }
-
-    /* Silhouette placeholder — replace with actual Cain artwork */
-    .hero-silhouette {
-      position: absolute;
-      bottom: 0;
-      left: 50%;
-      transform: translateX(-50%);
-      width: min(340px, 55vw);
-      height: 75%;
+        radial-gradient(ellipse 70% 40% at 50% 105%, rgba(160,55,10,0.55) 0%, transparent 65%),
+        linear-gradient(to top, rgba(8,4,2,0.75) 0%, transparent 45%),
+        linear-gradient(to bottom, rgba(8,4,2,0.55) 0%, transparent 35%);
       z-index: 1;
-      /* CSS silhouette of a standing figure */
-      background:
-        /* Head */
-        radial-gradient(ellipse 38px 46px at 50% 12%, #0a0604 100%, transparent 100%),
-        /* Shoulders / torso */
-        linear-gradient(to bottom,
-          transparent 0%,
-          transparent 10%,
-          #0a0604 14%,
-          #0a0604 85%,
-          transparent 100%
-        );
-      /* Clip to a rough figure shape */
-      clip-path: polygon(
-        38% 0%, 62% 0%,
-        72% 5%, 80% 10%,
-        85% 18%, 86% 30%,
-        82% 42%, 80% 55%,
-        82% 70%, 84% 85%,
-        80% 100%, 20% 100%,
-        16% 85%, 18% 70%,
-        20% 55%, 18% 42%,
-        14% 30%, 15% 18%,
-        20% 10%, 28% 5%
-      );
-      filter: blur(1px);
-      opacity: 0.85;
     }
 
-    /* Ember light cast upward on the silhouette */
-    .hero-silhouette::after {
-      content: '';
-      position: absolute;
-      bottom: 0;
-      left: 50%;
-      transform: translateX(-50%);
-      width: 140%;
-      height: 45%;
-      background: radial-gradient(ellipse at 50% 100%, rgba(200,100,20,0.22) 0%, transparent 70%);
-      z-index: 2;
-    }
-
-    /* Overlay that fades hero into page */
+    /* Fade into page body */
     .hero::after {
       content: '';
       position: absolute;
       bottom: 0;
       left: 0; right: 0;
-      height: 220px;
+      height: 260px;
       background: linear-gradient(to bottom, transparent, var(--void));
-      z-index: 3;
+      z-index: 2;
       pointer-events: none;
     }
 
     .hero-content {
       position: relative;
-      z-index: 4;
+      z-index: 3;
       padding: 0 2rem;
     }
 
-    .hero-content .eyebrow {
+    .eyebrow {
       font-size: 0.62rem;
       letter-spacing: 0.55em;
       text-transform: uppercase;
@@ -170,8 +114,8 @@
       letter-spacing: 0.18em;
       color: var(--ash);
       text-shadow:
-        0 0 140px rgba(200,122,64,0.45),
-        0 0  50px rgba(200,122,64,0.2),
+        0 0 140px rgba(200,122,64,0.5),
+        0 0  50px rgba(200,122,64,0.22),
         0 3px  8px rgba(0,0,0,0.95);
       line-height: 1;
       margin-bottom: 1rem;
@@ -249,8 +193,57 @@
     }
 
     /* ══════════════════════════════════
-       SINGLE ARTWORK STRIP
-       Replace .artwork-placeholder divs with <img> when ready
+       BIO + CAIN PORTRAIT
+    ══════════════════════════════════ */
+    .bio-section {
+      display: grid;
+      grid-template-columns: 1fr 220px;
+      gap: 3rem;
+      align-items: start;
+      margin-bottom: 4rem;
+    }
+
+    .bio-text p {
+      font-size: 1.1rem;
+      line-height: 2;
+      color: var(--smoke);
+      margin-bottom: 1.4rem;
+    }
+
+    .bio-text p:last-child { margin-bottom: 0; }
+
+    .bio-portrait {
+      position: relative;
+    }
+
+    .bio-portrait img {
+      width: 100%;
+      display: block;
+      filter: brightness(0.75) saturate(0.65);
+    }
+
+    /* Ember glow on portrait */
+    .bio-portrait::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background:
+        radial-gradient(ellipse 80% 35% at 50% 100%, rgba(160,55,10,0.45) 0%, transparent 60%),
+        linear-gradient(to top, rgba(8,4,2,0.5) 0%, transparent 40%);
+      pointer-events: none;
+    }
+
+    .bio-portrait-label {
+      font-size: 0.58rem;
+      letter-spacing: 0.35em;
+      text-transform: uppercase;
+      color: var(--soot);
+      text-align: center;
+      padding: 0.8rem 0 0;
+    }
+
+    /* ══════════════════════════════════
+       SINGLES GRID
     ══════════════════════════════════ */
     .artwork-strip {
       display: grid;
@@ -258,99 +251,72 @@
       gap: 1px;
       background: #1a1008;
       border: 1px solid #1a1008;
-      margin-bottom: 4rem;
+      margin-bottom: 1px;
     }
 
-    /* Placeholder square — each will become a cover art <img> */
-    .artwork-placeholder {
-      aspect-ratio: 1;
+    .artwork-item {
       position: relative;
+      aspect-ratio: 1;
       overflow: hidden;
+      display: block;
       cursor: default;
     }
 
-    .artwork-placeholder .art-bg {
-      position: absolute;
-      inset: 0;
-      transition: transform 0.6s ease;
+    .artwork-item img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+      transition: transform 0.6s ease, filter 0.4s ease;
+      filter: brightness(0.8) saturate(0.75);
     }
 
-    .artwork-placeholder:hover .art-bg {
+    .artwork-item:hover img {
       transform: scale(1.04);
-    }
-
-    /* Each single gets a distinct ember/smoke treatment */
-    .art-01 .art-bg {
-      background:
-        radial-gradient(ellipse 70% 60% at 40% 110%, rgba(180,60,10,0.7) 0%, transparent 65%),
-        radial-gradient(ellipse 50% 40% at 80% 20%,  rgba(80,20,5,0.4)   0%, transparent 55%),
-        linear-gradient(135deg, #0e0a06 0%, #160e08 50%, #0a0604 100%);
-    }
-
-    .art-02 .art-bg {
-      background:
-        radial-gradient(ellipse 80% 50% at 60% 110%, rgba(160,50,8,0.65) 0%, transparent 60%),
-        radial-gradient(ellipse 40% 60% at 10% 30%,  rgba(60,18,4,0.35)  0%, transparent 50%),
-        linear-gradient(160deg, #0c0804 0%, #180e06 60%, #0a0604 100%);
-    }
-
-    .art-03 .art-bg {
-      background:
-        radial-gradient(ellipse 60% 55% at 50% 105%, rgba(200,80,15,0.6)  0%, transparent 65%),
-        radial-gradient(ellipse 35% 45% at 85% 15%,  rgba(90,25,5,0.3)   0%, transparent 50%),
-        linear-gradient(120deg, #0a0604 0%, #120a06 55%, #0e0c08 100%);
-    }
-
-    .art-04 .art-bg {
-      background:
-        radial-gradient(ellipse 75% 45% at 30% 110%, rgba(140,45,8,0.65) 0%, transparent 60%),
-        radial-gradient(ellipse 45% 55% at 90% 25%,  rgba(70,20,4,0.3)   0%, transparent 50%),
-        linear-gradient(150deg, #0e0804 0%, #160c06 50%, #0a0804 100%);
+      filter: brightness(0.95) saturate(0.9);
     }
 
     .artwork-label {
       position: absolute;
       bottom: 0;
       left: 0; right: 0;
-      padding: 2rem 1.2rem 1.2rem;
-      background: linear-gradient(to top, rgba(8,6,4,0.92) 0%, transparent 100%);
+      padding: 2.5rem 1.2rem 1.2rem;
+      background: linear-gradient(to top, rgba(6,4,2,0.92) 0%, transparent 100%);
       z-index: 2;
     }
 
-    .artwork-label .art-num {
-      font-family: 'Cinzel', serif;
+    .art-num {
       font-size: 0.55rem;
-      color: var(--ember-dim);
       letter-spacing: 0.3em;
+      text-transform: uppercase;
+      color: var(--ember-dim);
       display: block;
       margin-bottom: 0.3rem;
     }
 
-    .artwork-label .art-title {
-      font-size: 0.75rem;
-      letter-spacing: 0.18em;
+    .art-title {
+      font-size: 0.8rem;
+      letter-spacing: 0.16em;
       text-transform: uppercase;
       color: var(--bone);
       display: block;
-      margin-bottom: 0.5rem;
+      margin-bottom: 0.45rem;
     }
 
-    .artwork-label .art-date {
-      font-size: 0.58rem;
+    .art-status {
+      font-size: 0.56rem;
       letter-spacing: 0.18em;
-      color: var(--coal);
+      text-transform: uppercase;
+      padding: 0.2rem 0.6rem;
+      border: 1px solid currentColor;
+      display: inline-block;
     }
 
-    /* IMAGE SWAP GUIDE (comment left in source):
-       Replace each .artwork-placeholder with:
-       <div class="artwork-placeholder art-0N">
-         <img src="your-cover.jpg" alt="Track Name" class="art-bg" style="object-fit:cover;width:100%;height:100%;">
-         <div class="artwork-label">...</div>
-       </div>
-    */
+    .status-out   { color: var(--ember-dim); border-color: var(--ember-dim); }
+    .status-soon  { color: #3a3028;          border-color: #2a2018; }
 
     /* ══════════════════════════════════
-       REMAINING CATALOGUE
+       EP ROW
     ══════════════════════════════════ */
     .release-grid {
       display: grid;
@@ -362,43 +328,48 @@
 
     .release-item {
       display: grid;
-      grid-template-columns: 1fr auto;
+      grid-template-columns: auto 1fr auto;
       align-items: center;
-      gap: 1rem;
-      padding: 1.1rem 1.4rem;
+      gap: 1.2rem;
+      padding: 0;
       background: var(--char);
       transition: background 0.25s;
     }
 
     .release-item:hover { background: #131008; }
     .release-item:hover .release-title { color: var(--ash); }
-    .release-item:hover .release-num   { color: var(--ember); }
 
-    .release-left {
-      display: flex;
-      align-items: center;
-      gap: 1.2rem;
+    .release-thumb {
+      width: 72px;
+      height: 72px;
+      object-fit: cover;
+      display: block;
+      filter: brightness(0.7) saturate(0.65);
+      flex-shrink: 0;
     }
 
-    .release-num {
-      font-family: 'Cinzel', serif;
-      font-size: 0.6rem;
-      color: var(--soot);
-      min-width: 1.6rem;
-      text-align: right;
-      transition: color 0.25s;
-      flex-shrink: 0;
+    .release-body {
+      padding: 1rem 0;
     }
 
     .release-title {
       font-size: 0.78rem;
-      letter-spacing: 0.2em;
+      letter-spacing: 0.18em;
       text-transform: uppercase;
       color: var(--coal);
       transition: color 0.25s;
+      display: block;
+      margin-bottom: 0.3rem;
+    }
+
+    .release-date {
+      font-size: 0.58rem;
+      letter-spacing: 0.15em;
+      color: var(--soot);
     }
 
     .release-meta {
+      padding: 0 1.4rem 0 0;
       display: flex;
       flex-direction: column;
       align-items: flex-end;
@@ -411,45 +382,14 @@
       text-transform: uppercase;
       padding: 0.25rem 0.65rem;
       border: 1px solid currentColor;
-      flex-shrink: 0;
     }
 
-    .badge-released  { color: var(--ember-dim); border-color: var(--ember-dim); }
-    .badge-upcoming  { color: #3a3028;           border-color: #2a2018; }
-    .badge-ep        { color: var(--soot);        border-color: var(--soot2); }
-
-    .release-date {
-      font-size: 0.58rem;
-      letter-spacing: 0.15em;
-      color: var(--soot);
-      white-space: nowrap;
-    }
+    .badge-ep { color: var(--soot); border-color: var(--soot2); }
 
     /* ══════════════════════════════════
-       BIO
+       LP SECTION
     ══════════════════════════════════ */
-    .bio-section {
-      text-align: center;
-      margin-bottom: 4rem;
-    }
-
-    .bio-section p {
-      font-size: 1.1rem;
-      line-height: 2;
-      color: var(--smoke);
-      max-width: 580px;
-      margin: 0 auto 1.4rem;
-    }
-
-    .bio-section p:last-child { margin-bottom: 0; }
-
-    /* ══════════════════════════════════
-       LP TEASER
-       Replace .lp-image-placeholder with cover art <img> when ready
-    ══════════════════════════════════ */
-    .lp-section {
-      margin-bottom: 4rem;
-    }
+    .lp-section { margin-bottom: 4rem; }
 
     .lp-inner {
       display: grid;
@@ -457,47 +397,19 @@
       gap: 1px;
       background: #1a1008;
       border: 1px solid #1a1008;
-      align-items: stretch;
     }
 
-    /* CSS stand-in for the LP cover — replace with <img> when LongLiveTheRuin.png is available */
-    .lp-image-placeholder {
+    .lp-image {
       aspect-ratio: 1;
-      position: relative;
-      overflow: hidden;
-      /* Ruined cathedral / lone mic scene */
-      background:
-        radial-gradient(ellipse 50% 80% at 50% 100%, rgba(160,55,10,0.55) 0%, transparent 65%),
-        radial-gradient(ellipse 80% 30% at 50% 50%,  rgba(40,15,3,0.6)    0%, transparent 70%),
-        radial-gradient(ellipse 30% 60% at 20% 20%,  rgba(30,10,2,0.4)    0%, transparent 55%),
-        linear-gradient(to bottom, #06060a 0%, #0a0806 40%, #0e0a04 100%);
+      object-fit: cover;
+      width: 100%;
+      display: block;
+      filter: brightness(0.75) saturate(0.7);
+      transition: filter 0.5s ease;
     }
 
-    /* Arched window / cathedral light */
-    .lp-image-placeholder::before {
-      content: '';
-      position: absolute;
-      top: 8%;
-      left: 50%;
-      transform: translateX(-50%);
-      width: 28%;
-      height: 42%;
-      background: radial-gradient(ellipse at 50% 0%, rgba(200,140,60,0.12) 0%, transparent 80%);
-      border-radius: 50% 50% 0 0 / 60% 60% 0 0;
-      box-shadow: 0 0 60px 20px rgba(180,100,30,0.08);
-    }
-
-    /* Mic stand silhouette */
-    .lp-image-placeholder::after {
-      content: '';
-      position: absolute;
-      bottom: 15%;
-      left: 50%;
-      transform: translateX(-50%);
-      width: 3px;
-      height: 40%;
-      background: linear-gradient(to bottom, rgba(180,120,60,0.4), rgba(80,40,10,0.2));
-      box-shadow: 0 0 12px 4px rgba(180,100,30,0.1);
+    .lp-inner:hover .lp-image {
+      filter: brightness(0.88) saturate(0.85);
     }
 
     .lp-copy {
@@ -595,26 +507,27 @@
     /* ══════════════════════════════════
        RESPONSIVE
     ══════════════════════════════════ */
-    @media (max-width: 560px) {
+    @media (max-width: 600px) {
       .page { padding: 0 1.2rem 4rem; }
+      .bio-section { grid-template-columns: 1fr; }
+      .bio-portrait { max-width: 200px; margin: 0 auto; }
       .artwork-strip { grid-template-columns: 1fr; }
       .lp-inner { grid-template-columns: 1fr; }
-      .lp-image-placeholder { aspect-ratio: 16/9; }
+      .lp-image { aspect-ratio: 16/9; }
       .lp-copy { padding: 2rem 1.5rem; }
     }
   </style>
 </head>
 <body>
 
-  <!-- ══════════════════════════════════
-       HERO
-       hero-image-placeholder → replace with:
-       <img src="cain-hero.jpg" alt="Cain" class="hero-image-placeholder" style="object-fit:cover;width:100%;height:100%;position:absolute;inset:0;">
-  ══════════════════════════════════ -->
+  <!-- ══ HERO ══ -->
   <header class="hero">
-    <div class="hero-image-placeholder">
-      <div class="hero-silhouette"></div>
-    </div>
+    <img
+      class="hero-image"
+      src="https://crbooks.ink/wp-content/themes/crbooks-theme-v2/assets/cinderwall-cain.jpg"
+      alt="Cain — Cinderwall"
+    >
+    <div class="hero-overlay"></div>
     <div class="hero-content">
       <p class="eyebrow">Fractured Lantern Records</p>
       <h1 class="band-name">Cinderwall</h1>
@@ -627,96 +540,109 @@
 
   <div class="page">
 
-    <!-- ── BIO ── -->
-    <section class="bio-section">
+    <!-- ══ BIO ══ -->
+    <section>
       <p class="section-label">About</p>
-      <p>
-        Cinderwall is dark alternative rock built from smoke, guilt, grit, and bad decisions.
-        Fronted by Cain — brooding, magnetic, tattooed, unapologetic — the sound blends
-        heavy fuzz bass, distorted guitars, and raw close-mic vocals that detonate into
-        massive choruses.
-      </p>
-      <p>
-        The songs live in the wreckage after the fire. Crowns that weigh too much.
-        Love that looks like damage. Victories that feel like regret.
-        Cain doesn't beg for redemption — he owns every mistake
-        and lets them burn.
-      </p>
+      <div class="bio-section">
+        <div class="bio-text">
+          <p>
+            Cinderwall is dark alternative rock built from smoke, guilt, grit, and bad decisions.
+            Fronted by Cain — brooding, magnetic, tattooed, unapologetic — the sound blends
+            heavy fuzz bass, distorted guitars, and raw close-mic vocals that detonate into
+            massive choruses.
+          </p>
+          <p>
+            The songs live in the wreckage after the fire. Crowns that weigh too much.
+            Love that looks like damage. Victories that feel like regret.
+            Cain doesn't beg for redemption — he owns every mistake
+            and lets them burn.
+          </p>
+        </div>
+        <div class="bio-portrait">
+          <img
+            src="https://crbooks.ink/wp-content/themes/crbooks-theme-v2/assets/cinderwall-art-5.jpg"
+            alt="Cain"
+          >
+          <p class="bio-portrait-label">Cain · Vocals</p>
+        </div>
+      </div>
     </section>
 
     <div class="rule-h"></div>
 
-    <!-- ══════════════════════════════════
-         SINGLES ARTWORK STRIP
-         Each .artwork-placeholder → replace with actual cover art
-    ══════════════════════════════════ -->
+    <!-- ══ SINGLES ══ -->
     <section>
       <p class="section-label">Singles</p>
       <div class="artwork-strip">
 
-        <div class="artwork-placeholder art-01">
-          <div class="art-bg"></div>
+        <div class="artwork-item">
+          <img src="https://crbooks.ink/wp-content/uploads/2026/06/CoA_cover11-1024x1024.png" alt="Crown of Ash">
           <div class="artwork-label">
-            <span class="art-num">Single — Jul 3, 2026</span>
+            <span class="art-num">Single · Jul 3, 2026</span>
             <span class="art-title">Crown of Ash</span>
-            <span class="art-date">Released</span>
+            <span class="art-status status-out">Released</span>
           </div>
         </div>
 
-        <div class="artwork-placeholder art-02">
-          <div class="art-bg"></div>
+        <div class="artwork-item">
+          <img src="https://crbooks.ink/wp-content/uploads/2026/06/5581AC8C-9570-44D9-A90A-55E9300C5B53_4_5005_c.jpeg" alt="Bad Men Make Good Stories">
           <div class="artwork-label">
-            <span class="art-num">Single — Aug 7, 2026</span>
+            <span class="art-num">Single · Aug 7, 2026</span>
             <span class="art-title">Bad Men Make Good Stories</span>
-            <span class="art-date">Released</span>
+            <span class="art-status status-out">Released</span>
           </div>
         </div>
 
-        <div class="artwork-placeholder art-03">
-          <div class="art-bg"></div>
+        <div class="artwork-item">
+          <img src="https://crbooks.ink/wp-content/uploads/2026/06/god-of-bad-decisions.jpg" alt="God of Bad Decisions">
           <div class="artwork-label">
-            <span class="art-num">Single — Sep 4, 2026</span>
+            <span class="art-num">Single · Sep 4, 2026</span>
             <span class="art-title">God of Bad Decisions</span>
-            <span class="art-date">Coming Soon</span>
+            <span class="art-status status-soon">Coming Soon</span>
           </div>
         </div>
 
-        <div class="artwork-placeholder art-04">
-          <div class="art-bg"></div>
+        <div class="artwork-item">
+          <img src="https://crbooks.ink/wp-content/uploads/2026/06/no-kingdom-left.jpg" alt="Last Good Thing">
           <div class="artwork-label">
-            <span class="art-num">Single — Oct 2, 2026</span>
+            <span class="art-num">Single · Oct 2, 2026</span>
             <span class="art-title">Last Good Thing</span>
-            <span class="art-date">Coming Soon</span>
+            <span class="art-status status-soon">Coming Soon</span>
           </div>
         </div>
 
+      </div>
+
+      <!-- EP row -->
+      <div class="release-grid">
+        <div class="release-item">
+          <img
+            class="release-thumb"
+            src="https://crbooks.ink/wp-content/uploads/2026/06/no-kingdom-left-ep-cover-1024x1024.jpg"
+            alt="No Kingdom Left EP"
+          >
+          <div class="release-body">
+            <span class="release-title">No Kingdom Left — EP</span>
+            <span class="release-date">Dec 4, 2026</span>
+          </div>
+          <div class="release-meta">
+            <span class="release-badge badge-ep">EP</span>
+          </div>
+        </div>
       </div>
     </section>
 
-    <!-- ── EP + REMAINING CATALOGUE ── -->
-    <div class="release-grid">
-      <div class="release-item">
-        <div class="release-left">
-          <span class="release-num">EP</span>
-          <span class="release-title">No Kingdom Left</span>
-        </div>
-        <div class="release-meta">
-          <span class="release-badge badge-ep">EP</span>
-          <span class="release-date">Dec 4, 2026</span>
-        </div>
-      </div>
-    </div>
-
     <div class="rule-h"></div>
 
-    <!-- ══════════════════════════════════
-         LP TEASER
-         lp-image-placeholder → replace with LongLiveTheRuin.png
-    ══════════════════════════════════ -->
+    <!-- ══ LP ══ -->
     <section class="lp-section">
       <p class="section-label">Coming</p>
       <div class="lp-inner">
-        <div class="lp-image-placeholder"></div>
+        <img
+          class="lp-image"
+          src="https://crbooks.ink/wp-content/uploads/2026/06/long-live-the-ruin-lp-cover-1024x1024.jpg"
+          alt="Long Live The Ruin"
+        >
         <div class="lp-copy">
           <p class="lp-label">Debut LP</p>
           <h2 class="lp-title">Long Live<br>The Ruin</h2>
@@ -728,17 +654,17 @@
 
     <div class="rule-h"></div>
 
-    <!-- ── LISTEN LINKS ── -->
+    <!-- ══ LISTEN ══ -->
     <section class="links-section">
       <p class="section-label">Listen</p>
       <nav class="links">
         <a href="#">Spotify</a>
         <a href="#">Apple Music</a>
-        <a href="https://crbooks.ink">CRBooks.ink</a>
+        <a href="https://crbooks.ink/cinderwall/">CRBooks.ink</a>
       </nav>
     </section>
 
-    <!-- ── FOOTER ── -->
+    <!-- ══ FOOTER ══ -->
     <footer>
       <p>© 2026 Cinderwall &nbsp;·&nbsp; Fractured Lantern Records</p>
       <p>A CRBooks Project</p>
