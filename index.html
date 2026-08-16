@@ -11,17 +11,16 @@
     *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
 
     :root {
-      --ash:   #e8e0d4;
-      --bone:  #d4c8b8;
-      --ember: #c87a40;
-      --ember-dim: #8a4f22;
-      --smoke: #a0978e;
-      --coal:  #6a5a4a;
-      --soot:  #3a2a1a;
-      --soot2: #2a1e12;
-      --void:  #080808;
-      --char:  #0e0c0a;
-      --glow:  rgba(200,122,64,0.18);
+      --ash:        #e8e0d4;
+      --bone:       #d4c8b8;
+      --ember:      #c87a40;
+      --ember-dim:  #8a4f22;
+      --smoke:      #a0978e;
+      --coal:       #6a5a4a;
+      --soot:       #3a2a1a;
+      --soot2:      #2a1e12;
+      --void:       #080808;
+      --char:       #0e0c0a;
     }
 
     html { scroll-behavior: smooth; }
@@ -34,103 +33,191 @@
       overflow-x: hidden;
     }
 
-    /* ── Atmospheric background ── */
-    body::before {
-      content: '';
-      position: fixed;
-      inset: 0;
-      background:
-        radial-gradient(ellipse at 50% 110%, rgba(160,60,10,0.28) 0%, transparent 55%),
-        radial-gradient(ellipse at 15% 0%,   rgba(80,30,5,0.14)  0%, transparent 45%),
-        radial-gradient(ellipse at 85% 20%,  rgba(60,20,5,0.10)  0%, transparent 40%);
-      pointer-events: none;
-      z-index: 0;
-    }
-
-    /* ── Grain overlay ── */
+    /* ── Global grain ── */
     body::after {
       content: '';
       position: fixed;
       inset: 0;
       background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.035'/%3E%3C/svg%3E");
       pointer-events: none;
-      z-index: 0;
-      opacity: 0.5;
+      z-index: 100;
+      opacity: 0.45;
     }
 
-    /* ── Page wrapper ── */
+    /* ══════════════════════════════════
+       HERO — full-bleed CSS scene
+       Replace .hero-image with <img> when artwork is ready
+    ══════════════════════════════════ */
+    .hero {
+      position: relative;
+      width: 100%;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      overflow: hidden;
+    }
+
+    /* CSS stand-in for the hero image — swap for <img class="hero-image"> later */
+    .hero-image-placeholder {
+      position: absolute;
+      inset: 0;
+      /* Cracked wall / ember glow scene in pure CSS */
+      background:
+        /* Ember bloom at base — will sit behind Cain */
+        radial-gradient(ellipse 60% 35% at 50% 100%, rgba(180,70,10,0.55) 0%, transparent 70%),
+        /* Secondary side glow */
+        radial-gradient(ellipse 30% 50% at 20% 60%,  rgba(120,40,5,0.25)  0%, transparent 60%),
+        radial-gradient(ellipse 25% 40% at 80% 40%,  rgba(100,35,5,0.18)  0%, transparent 55%),
+        /* Deep void */
+        linear-gradient(to bottom, #0a0604 0%, #0e0a06 40%, #120c06 70%, #1a0e06 100%);
+      z-index: 0;
+    }
+
+    /* Cracked wall texture via SVG filter */
+    .hero-image-placeholder::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='800' height='800'%3E%3Cfilter id='crack'%3E%3CfeTurbulence type='turbulence' baseFrequency='0.02 0.05' numOctaves='3' seed='8' result='noise'/%3E%3CfeColorMatrix type='saturate' values='0' in='noise' result='grey'/%3E%3CfeComponentTransfer in='grey' result='contrast'%3E%3CfeFuncR type='discrete' tableValues='0 0 0 0 0 0.03 0.03'/%3E%3CfeFuncG type='discrete' tableValues='0 0 0 0 0 0.02 0.02'/%3E%3CfeFuncB type='discrete' tableValues='0 0 0 0 0 0.01 0.01'/%3E%3C/feComponentTransfer%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23crack)' opacity='0.6'/%3E%3C/svg%3E");
+      opacity: 0.7;
+      z-index: 0;
+    }
+
+    /* Silhouette placeholder — replace with actual Cain artwork */
+    .hero-silhouette {
+      position: absolute;
+      bottom: 0;
+      left: 50%;
+      transform: translateX(-50%);
+      width: min(340px, 55vw);
+      height: 75%;
+      z-index: 1;
+      /* CSS silhouette of a standing figure */
+      background:
+        /* Head */
+        radial-gradient(ellipse 38px 46px at 50% 12%, #0a0604 100%, transparent 100%),
+        /* Shoulders / torso */
+        linear-gradient(to bottom,
+          transparent 0%,
+          transparent 10%,
+          #0a0604 14%,
+          #0a0604 85%,
+          transparent 100%
+        );
+      /* Clip to a rough figure shape */
+      clip-path: polygon(
+        38% 0%, 62% 0%,
+        72% 5%, 80% 10%,
+        85% 18%, 86% 30%,
+        82% 42%, 80% 55%,
+        82% 70%, 84% 85%,
+        80% 100%, 20% 100%,
+        16% 85%, 18% 70%,
+        20% 55%, 18% 42%,
+        14% 30%, 15% 18%,
+        20% 10%, 28% 5%
+      );
+      filter: blur(1px);
+      opacity: 0.85;
+    }
+
+    /* Ember light cast upward on the silhouette */
+    .hero-silhouette::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 140%;
+      height: 45%;
+      background: radial-gradient(ellipse at 50% 100%, rgba(200,100,20,0.22) 0%, transparent 70%);
+      z-index: 2;
+    }
+
+    /* Overlay that fades hero into page */
+    .hero::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 0; right: 0;
+      height: 220px;
+      background: linear-gradient(to bottom, transparent, var(--void));
+      z-index: 3;
+      pointer-events: none;
+    }
+
+    .hero-content {
+      position: relative;
+      z-index: 4;
+      padding: 0 2rem;
+    }
+
+    .hero-content .eyebrow {
+      font-size: 0.62rem;
+      letter-spacing: 0.55em;
+      text-transform: uppercase;
+      color: var(--ember-dim);
+      margin-bottom: 1.6rem;
+    }
+
+    .band-name {
+      font-family: 'Cinzel', serif;
+      font-size: clamp(3.8rem, 13vw, 7rem);
+      font-weight: 700;
+      letter-spacing: 0.18em;
+      color: var(--ash);
+      text-shadow:
+        0 0 140px rgba(200,122,64,0.45),
+        0 0  50px rgba(200,122,64,0.2),
+        0 3px  8px rgba(0,0,0,0.95);
+      line-height: 1;
+      margin-bottom: 1rem;
+    }
+
+    .tagline {
+      font-size: 0.7rem;
+      letter-spacing: 0.4em;
+      text-transform: uppercase;
+      color: var(--coal);
+      margin-bottom: 3rem;
+    }
+
+    .hero-rule {
+      width: 1px;
+      height: 52px;
+      background: linear-gradient(to bottom, transparent, var(--ember-dim), transparent);
+      margin: 0 auto 2.2rem;
+    }
+
+    .hero-quote {
+      font-size: 1.1rem;
+      font-style: italic;
+      font-weight: 300;
+      color: var(--coal);
+      line-height: 1.7;
+      max-width: 440px;
+      margin: 0 auto 0.5rem;
+    }
+
+    .hero-quote-attr {
+      font-size: 0.62rem;
+      letter-spacing: 0.3em;
+      text-transform: uppercase;
+      color: var(--soot);
+    }
+
+    /* ══════════════════════════════════
+       PAGE BODY
+    ══════════════════════════════════ */
     .page {
       position: relative;
       z-index: 1;
       max-width: 760px;
       margin: 0 auto;
       padding: 0 2rem 6rem;
-    }
-
-    /* ══════════════════════════════════
-       HERO
-    ══════════════════════════════════ */
-    .hero {
-      padding: 7rem 0 4rem;
-      text-align: center;
-      border-bottom: 1px solid #1c1410;
-      margin-bottom: 4rem;
-    }
-
-    .eyebrow {
-      font-size: 0.65rem;
-      letter-spacing: 0.55em;
-      text-transform: uppercase;
-      color: var(--ember-dim);
-      margin-bottom: 1.8rem;
-    }
-
-    .band-name {
-      font-family: 'Cinzel', serif;
-      font-size: clamp(3.5rem, 12vw, 6.5rem);
-      font-weight: 700;
-      letter-spacing: 0.2em;
-      color: var(--ash);
-      text-shadow:
-        0 0 120px rgba(200,122,64,0.4),
-        0 0  40px rgba(200,122,64,0.18),
-        0 2px  4px rgba(0,0,0,0.9);
-      line-height: 1;
-      margin-bottom: 1rem;
-    }
-
-    .tagline {
-      font-size: 0.72rem;
-      letter-spacing: 0.38em;
-      text-transform: uppercase;
-      color: var(--coal);
-      margin-bottom: 2.8rem;
-    }
-
-    /* Pull-quote in hero */
-    .hero-quote {
-      font-size: 1.15rem;
-      font-style: italic;
-      font-weight: 300;
-      color: var(--coal);
-      line-height: 1.65;
-      max-width: 480px;
-      margin: 0 auto 0.6rem;
-    }
-
-    .hero-quote-attr {
-      font-size: 0.65rem;
-      letter-spacing: 0.3em;
-      text-transform: uppercase;
-      color: var(--soot);
-    }
-
-    /* Ember rule */
-    .rule {
-      width: 1px;
-      height: 48px;
-      background: linear-gradient(to bottom, transparent, var(--ember-dim), transparent);
-      margin: 2.5rem auto;
     }
 
     .rule-h {
@@ -140,12 +227,9 @@
       margin: 3.5rem 0;
     }
 
-    /* ══════════════════════════════════
-       SECTION LABELS
-    ══════════════════════════════════ */
     .section-label {
-      font-size: 0.6rem;
-      letter-spacing: 0.55em;
+      font-size: 0.58rem;
+      letter-spacing: 0.58em;
       text-transform: uppercase;
       color: var(--ember-dim);
       margin-bottom: 2rem;
@@ -165,35 +249,115 @@
     }
 
     /* ══════════════════════════════════
-       BIO
+       SINGLE ARTWORK STRIP
+       Replace .artwork-placeholder divs with <img> when ready
     ══════════════════════════════════ */
-    .bio-section {
-      text-align: center;
+    .artwork-strip {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 1px;
+      background: #1a1008;
+      border: 1px solid #1a1008;
       margin-bottom: 4rem;
     }
 
-    .bio-section p {
-      font-size: 1.12rem;
-      line-height: 1.95;
-      color: var(--smoke);
-      max-width: 580px;
-      margin: 0 auto 1.4rem;
+    /* Placeholder square — each will become a cover art <img> */
+    .artwork-placeholder {
+      aspect-ratio: 1;
+      position: relative;
+      overflow: hidden;
+      cursor: default;
     }
 
-    .bio-section p:last-child { margin-bottom: 0; }
+    .artwork-placeholder .art-bg {
+      position: absolute;
+      inset: 0;
+      transition: transform 0.6s ease;
+    }
+
+    .artwork-placeholder:hover .art-bg {
+      transform: scale(1.04);
+    }
+
+    /* Each single gets a distinct ember/smoke treatment */
+    .art-01 .art-bg {
+      background:
+        radial-gradient(ellipse 70% 60% at 40% 110%, rgba(180,60,10,0.7) 0%, transparent 65%),
+        radial-gradient(ellipse 50% 40% at 80% 20%,  rgba(80,20,5,0.4)   0%, transparent 55%),
+        linear-gradient(135deg, #0e0a06 0%, #160e08 50%, #0a0604 100%);
+    }
+
+    .art-02 .art-bg {
+      background:
+        radial-gradient(ellipse 80% 50% at 60% 110%, rgba(160,50,8,0.65) 0%, transparent 60%),
+        radial-gradient(ellipse 40% 60% at 10% 30%,  rgba(60,18,4,0.35)  0%, transparent 50%),
+        linear-gradient(160deg, #0c0804 0%, #180e06 60%, #0a0604 100%);
+    }
+
+    .art-03 .art-bg {
+      background:
+        radial-gradient(ellipse 60% 55% at 50% 105%, rgba(200,80,15,0.6)  0%, transparent 65%),
+        radial-gradient(ellipse 35% 45% at 85% 15%,  rgba(90,25,5,0.3)   0%, transparent 50%),
+        linear-gradient(120deg, #0a0604 0%, #120a06 55%, #0e0c08 100%);
+    }
+
+    .art-04 .art-bg {
+      background:
+        radial-gradient(ellipse 75% 45% at 30% 110%, rgba(140,45,8,0.65) 0%, transparent 60%),
+        radial-gradient(ellipse 45% 55% at 90% 25%,  rgba(70,20,4,0.3)   0%, transparent 50%),
+        linear-gradient(150deg, #0e0804 0%, #160c06 50%, #0a0804 100%);
+    }
+
+    .artwork-label {
+      position: absolute;
+      bottom: 0;
+      left: 0; right: 0;
+      padding: 2rem 1.2rem 1.2rem;
+      background: linear-gradient(to top, rgba(8,6,4,0.92) 0%, transparent 100%);
+      z-index: 2;
+    }
+
+    .artwork-label .art-num {
+      font-family: 'Cinzel', serif;
+      font-size: 0.55rem;
+      color: var(--ember-dim);
+      letter-spacing: 0.3em;
+      display: block;
+      margin-bottom: 0.3rem;
+    }
+
+    .artwork-label .art-title {
+      font-size: 0.75rem;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--bone);
+      display: block;
+      margin-bottom: 0.5rem;
+    }
+
+    .artwork-label .art-date {
+      font-size: 0.58rem;
+      letter-spacing: 0.18em;
+      color: var(--coal);
+    }
+
+    /* IMAGE SWAP GUIDE (comment left in source):
+       Replace each .artwork-placeholder with:
+       <div class="artwork-placeholder art-0N">
+         <img src="your-cover.jpg" alt="Track Name" class="art-bg" style="object-fit:cover;width:100%;height:100%;">
+         <div class="artwork-label">...</div>
+       </div>
+    */
 
     /* ══════════════════════════════════
-       RELEASES
+       REMAINING CATALOGUE
     ══════════════════════════════════ */
-    .releases {
-      margin-bottom: 4rem;
-    }
-
     .release-grid {
       display: grid;
       gap: 1px;
       background: #1a1008;
       border: 1px solid #1a1008;
+      margin-bottom: 4rem;
     }
 
     .release-item {
@@ -204,13 +368,9 @@
       padding: 1.1rem 1.4rem;
       background: var(--char);
       transition: background 0.25s;
-      cursor: default;
     }
 
-    .release-item:hover {
-      background: #131008;
-    }
-
+    .release-item:hover { background: #131008; }
     .release-item:hover .release-title { color: var(--ash); }
     .release-item:hover .release-num   { color: var(--ember); }
 
@@ -231,43 +391,11 @@
     }
 
     .release-title {
-      font-size: 0.8rem;
+      font-size: 0.78rem;
       letter-spacing: 0.2em;
       text-transform: uppercase;
       color: var(--coal);
       transition: color 0.25s;
-    }
-
-    .release-badge {
-      font-size: 0.58rem;
-      letter-spacing: 0.2em;
-      text-transform: uppercase;
-      padding: 0.25rem 0.7rem;
-      border: 1px solid currentColor;
-      flex-shrink: 0;
-    }
-
-    .badge-released {
-      color: var(--ember-dim);
-      border-color: var(--ember-dim);
-    }
-
-    .badge-upcoming {
-      color: #3a3028;
-      border-color: #2a2018;
-    }
-
-    .badge-ep {
-      color: var(--soot);
-      border-color: var(--soot2);
-    }
-
-    .release-date {
-      font-size: 0.6rem;
-      letter-spacing: 0.15em;
-      color: var(--soot);
-      text-align: right;
-      white-space: nowrap;
     }
 
     .release-meta {
@@ -277,35 +405,138 @@
       gap: 0.35rem;
     }
 
+    .release-badge {
+      font-size: 0.56rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      padding: 0.25rem 0.65rem;
+      border: 1px solid currentColor;
+      flex-shrink: 0;
+    }
+
+    .badge-released  { color: var(--ember-dim); border-color: var(--ember-dim); }
+    .badge-upcoming  { color: #3a3028;           border-color: #2a2018; }
+    .badge-ep        { color: var(--soot);        border-color: var(--soot2); }
+
+    .release-date {
+      font-size: 0.58rem;
+      letter-spacing: 0.15em;
+      color: var(--soot);
+      white-space: nowrap;
+    }
+
     /* ══════════════════════════════════
-       UPCOMING
+       BIO
     ══════════════════════════════════ */
-    .upcoming-section {
-      margin-bottom: 4rem;
+    .bio-section {
       text-align: center;
+      margin-bottom: 4rem;
     }
 
-    .upcoming-title {
+    .bio-section p {
+      font-size: 1.1rem;
+      line-height: 2;
+      color: var(--smoke);
+      max-width: 580px;
+      margin: 0 auto 1.4rem;
+    }
+
+    .bio-section p:last-child { margin-bottom: 0; }
+
+    /* ══════════════════════════════════
+       LP TEASER
+       Replace .lp-image-placeholder with cover art <img> when ready
+    ══════════════════════════════════ */
+    .lp-section {
+      margin-bottom: 4rem;
+    }
+
+    .lp-inner {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1px;
+      background: #1a1008;
+      border: 1px solid #1a1008;
+      align-items: stretch;
+    }
+
+    /* CSS stand-in for the LP cover — replace with <img> when LongLiveTheRuin.png is available */
+    .lp-image-placeholder {
+      aspect-ratio: 1;
+      position: relative;
+      overflow: hidden;
+      /* Ruined cathedral / lone mic scene */
+      background:
+        radial-gradient(ellipse 50% 80% at 50% 100%, rgba(160,55,10,0.55) 0%, transparent 65%),
+        radial-gradient(ellipse 80% 30% at 50% 50%,  rgba(40,15,3,0.6)    0%, transparent 70%),
+        radial-gradient(ellipse 30% 60% at 20% 20%,  rgba(30,10,2,0.4)    0%, transparent 55%),
+        linear-gradient(to bottom, #06060a 0%, #0a0806 40%, #0e0a04 100%);
+    }
+
+    /* Arched window / cathedral light */
+    .lp-image-placeholder::before {
+      content: '';
+      position: absolute;
+      top: 8%;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 28%;
+      height: 42%;
+      background: radial-gradient(ellipse at 50% 0%, rgba(200,140,60,0.12) 0%, transparent 80%);
+      border-radius: 50% 50% 0 0 / 60% 60% 0 0;
+      box-shadow: 0 0 60px 20px rgba(180,100,30,0.08);
+    }
+
+    /* Mic stand silhouette */
+    .lp-image-placeholder::after {
+      content: '';
+      position: absolute;
+      bottom: 15%;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 3px;
+      height: 40%;
+      background: linear-gradient(to bottom, rgba(180,120,60,0.4), rgba(80,40,10,0.2));
+      box-shadow: 0 0 12px 4px rgba(180,100,30,0.1);
+    }
+
+    .lp-copy {
+      background: var(--char);
+      padding: 3rem 2.5rem;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+
+    .lp-label {
+      font-size: 0.58rem;
+      letter-spacing: 0.45em;
+      text-transform: uppercase;
+      color: var(--ember-dim);
+      margin-bottom: 1.2rem;
+    }
+
+    .lp-title {
       font-family: 'Cinzel', serif;
-      font-size: clamp(1.3rem, 4vw, 1.8rem);
+      font-size: clamp(1.3rem, 3.5vw, 1.9rem);
       font-weight: 600;
-      letter-spacing: 0.18em;
+      letter-spacing: 0.12em;
       color: var(--bone);
-      margin-bottom: 0.5rem;
+      line-height: 1.25;
+      margin-bottom: 1rem;
     }
 
-    .upcoming-sub {
+    .lp-sub {
       font-size: 0.68rem;
-      letter-spacing: 0.3em;
+      letter-spacing: 0.28em;
       text-transform: uppercase;
-      color: var(--ember);
-      margin-bottom: 0.8rem;
+      color: var(--coal);
+      margin-bottom: 0.7rem;
     }
 
-    .upcoming-date {
+    .lp-date {
       font-size: 0.62rem;
-      letter-spacing: 0.25em;
-      text-transform: uppercase;
+      letter-spacing: 0.22em;
       color: var(--soot);
     }
 
@@ -352,7 +583,7 @@
     }
 
     footer p {
-      font-size: 0.6rem;
+      font-size: 0.58rem;
       letter-spacing: 0.22em;
       text-transform: uppercase;
       color: #222018;
@@ -364,26 +595,37 @@
     /* ══════════════════════════════════
        RESPONSIVE
     ══════════════════════════════════ */
-    @media (max-width: 520px) {
+    @media (max-width: 560px) {
       .page { padding: 0 1.2rem 4rem; }
-      .hero { padding: 5rem 0 3rem; }
-      .release-item { padding: 1rem; }
-      .links { gap: 0 1.5rem; }
+      .artwork-strip { grid-template-columns: 1fr; }
+      .lp-inner { grid-template-columns: 1fr; }
+      .lp-image-placeholder { aspect-ratio: 16/9; }
+      .lp-copy { padding: 2rem 1.5rem; }
     }
   </style>
 </head>
 <body>
-  <div class="page">
 
-    <!-- ── HERO ── -->
-    <header class="hero">
+  <!-- ══════════════════════════════════
+       HERO
+       hero-image-placeholder → replace with:
+       <img src="cain-hero.jpg" alt="Cain" class="hero-image-placeholder" style="object-fit:cover;width:100%;height:100%;position:absolute;inset:0;">
+  ══════════════════════════════════ -->
+  <header class="hero">
+    <div class="hero-image-placeholder">
+      <div class="hero-silhouette"></div>
+    </div>
+    <div class="hero-content">
       <p class="eyebrow">Fractured Lantern Records</p>
       <h1 class="band-name">Cinderwall</h1>
       <p class="tagline">Dark Alternative Rock &nbsp;·&nbsp; Post-Grunge</p>
-      <div class="rule"></div>
+      <div class="hero-rule"></div>
       <p class="hero-quote">"You don't want a good man.<br>You want a warning with a pulse."</p>
       <p class="hero-quote-attr">— Bad Men Make Good Stories</p>
-    </header>
+    </div>
+  </header>
+
+  <div class="page">
 
     <!-- ── BIO ── -->
     <section class="bio-section">
@@ -404,82 +646,89 @@
 
     <div class="rule-h"></div>
 
-    <!-- ── RELEASES ── -->
-    <section class="releases">
-      <p class="section-label">Catalogue</p>
-      <div class="release-grid">
+    <!-- ══════════════════════════════════
+         SINGLES ARTWORK STRIP
+         Each .artwork-placeholder → replace with actual cover art
+    ══════════════════════════════════ -->
+    <section>
+      <p class="section-label">Singles</p>
+      <div class="artwork-strip">
 
-        <div class="release-item">
-          <div class="release-left">
-            <span class="release-num">01</span>
-            <span class="release-title">Crown of Ash</span>
-          </div>
-          <div class="release-meta">
-            <span class="release-badge badge-released">Single</span>
-            <span class="release-date">Jul 3, 2026</span>
+        <div class="artwork-placeholder art-01">
+          <div class="art-bg"></div>
+          <div class="artwork-label">
+            <span class="art-num">Single — Jul 3, 2026</span>
+            <span class="art-title">Crown of Ash</span>
+            <span class="art-date">Released</span>
           </div>
         </div>
 
-        <div class="release-item">
-          <div class="release-left">
-            <span class="release-num">02</span>
-            <span class="release-title">Bad Men Make Good Stories</span>
-          </div>
-          <div class="release-meta">
-            <span class="release-badge badge-released">Single</span>
-            <span class="release-date">Aug 7, 2026</span>
+        <div class="artwork-placeholder art-02">
+          <div class="art-bg"></div>
+          <div class="artwork-label">
+            <span class="art-num">Single — Aug 7, 2026</span>
+            <span class="art-title">Bad Men Make Good Stories</span>
+            <span class="art-date">Released</span>
           </div>
         </div>
 
-        <div class="release-item">
-          <div class="release-left">
-            <span class="release-num">03</span>
-            <span class="release-title">God of Bad Decisions</span>
-          </div>
-          <div class="release-meta">
-            <span class="release-badge badge-upcoming">Single</span>
-            <span class="release-date">Sep 4, 2026</span>
+        <div class="artwork-placeholder art-03">
+          <div class="art-bg"></div>
+          <div class="artwork-label">
+            <span class="art-num">Single — Sep 4, 2026</span>
+            <span class="art-title">God of Bad Decisions</span>
+            <span class="art-date">Coming Soon</span>
           </div>
         </div>
 
-        <div class="release-item">
-          <div class="release-left">
-            <span class="release-num">04</span>
-            <span class="release-title">Last Good Thing</span>
-          </div>
-          <div class="release-meta">
-            <span class="release-badge badge-upcoming">Single</span>
-            <span class="release-date">Oct 2, 2026</span>
-          </div>
-        </div>
-
-        <div class="release-item">
-          <div class="release-left">
-            <span class="release-num">05</span>
-            <span class="release-title">No Kingdom Left EP</span>
-          </div>
-          <div class="release-meta">
-            <span class="release-badge badge-ep">EP</span>
-            <span class="release-date">Dec 4, 2026</span>
+        <div class="artwork-placeholder art-04">
+          <div class="art-bg"></div>
+          <div class="artwork-label">
+            <span class="art-num">Single — Oct 2, 2026</span>
+            <span class="art-title">Last Good Thing</span>
+            <span class="art-date">Coming Soon</span>
           </div>
         </div>
 
       </div>
     </section>
 
+    <!-- ── EP + REMAINING CATALOGUE ── -->
+    <div class="release-grid">
+      <div class="release-item">
+        <div class="release-left">
+          <span class="release-num">EP</span>
+          <span class="release-title">No Kingdom Left</span>
+        </div>
+        <div class="release-meta">
+          <span class="release-badge badge-ep">EP</span>
+          <span class="release-date">Dec 4, 2026</span>
+        </div>
+      </div>
+    </div>
+
     <div class="rule-h"></div>
 
-    <!-- ── UPCOMING ── -->
-    <section class="upcoming-section">
+    <!-- ══════════════════════════════════
+         LP TEASER
+         lp-image-placeholder → replace with LongLiveTheRuin.png
+    ══════════════════════════════════ -->
+    <section class="lp-section">
       <p class="section-label">Coming</p>
-      <h2 class="upcoming-title">Long Live The Ruin</h2>
-      <p class="upcoming-sub">Debut LP</p>
-      <p class="upcoming-date">Jun 4, 2027</p>
+      <div class="lp-inner">
+        <div class="lp-image-placeholder"></div>
+        <div class="lp-copy">
+          <p class="lp-label">Debut LP</p>
+          <h2 class="lp-title">Long Live<br>The Ruin</h2>
+          <p class="lp-sub">Fractured Lantern Records</p>
+          <p class="lp-date">Jun 4, 2027</p>
+        </div>
+      </div>
     </section>
 
     <div class="rule-h"></div>
 
-    <!-- ── LINKS ── -->
+    <!-- ── LISTEN LINKS ── -->
     <section class="links-section">
       <p class="section-label">Listen</p>
       <nav class="links">
@@ -492,7 +741,7 @@
     <!-- ── FOOTER ── -->
     <footer>
       <p>© 2026 Cinderwall &nbsp;·&nbsp; Fractured Lantern Records</p>
-      <p>A CRBooks project</p>
+      <p>A CRBooks Project</p>
     </footer>
 
   </div>
